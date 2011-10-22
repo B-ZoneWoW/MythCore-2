@@ -1025,7 +1025,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder * holder)
         bonuses = fields[0].GetUInt32();
         int add = fields[1].GetUInt32();
         bonuses = bonuses + add;
-        CharacterDatabase.PQuery("UPDATE `bonus` SET `bonuses` = `bonuses` + %u, `add` = `add` - %u WHERE `account` = %u", add, add, accidd);
+        CharacterDatabase.PQuery("UPDATE `bonus` SET `bonuses` = `bonuses` + %u, `add` = `add` - %u WHERE `account` = %u", add, add, accid);
     }
 
     Item * i = pCurrChar->GetItemByEntry(BONUS_TOKEN);
