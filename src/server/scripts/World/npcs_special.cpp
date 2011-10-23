@@ -1929,8 +1929,9 @@ public:
             if (owner && !me->HasUnitState(UNIT_STAT_FOLLOW))
             {
                 me->GetMotionMaster()->Clear(false);
-                me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST, me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
-            }
+                me->SetSpeed(MOVE_RUN, 1.05f, true);
+		me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST-2, me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
+	    }
         }
     };
 
