@@ -1848,6 +1848,8 @@ public:
     {
         npc_mirror_imageAI(Creature *c) : CasterAI(c) {}
 
+        bool inCombat;
+
         void InitializeAI()
         {
             CasterAI::InitializeAI();
@@ -1864,10 +1866,12 @@ public:
 
             if (owner->ToPlayer() && owner->ToPlayer()->GetSelectedUnit())
                 me->AI()->AttackStart(owner->ToPlayer()->GetSelectedUnit());
+                inCombat = true;
         }
 
         void EnterCombat(Unit *who)
         {
+            Unit* owner = me->GetOwner();
             if (spells.empty())
                 return;
 
@@ -1881,7 +1885,11 @@ public:
                     events.ScheduleEvent(*itr, cooldown);
                 }
             }
-        }
+                if (!inCombat && owner->isInCombat())
+                    me->AI()->AttackStart(who);
+                    
+                inCombat = true;
+         }
 
         void UpdateAI(uint32 const diff)
         {
@@ -1916,6 +1924,7 @@ public:
                 uint32 casttime = me->GetCurrentSpellCastTime(spellId);
                 events.ScheduleEvent(spellId, (casttime ? casttime : 500) + GetAISpellInfo(spellId)->realCooldown);
             }
+                inCombat = true;
         }
 
         // Do not reload Creature templates on evade mode enter - prevent visual lost
@@ -1934,6 +1943,7 @@ public:
                 me->SetSpeed(MOVE_RUN, owner->GetSpeedRate(MOVE_RUN), true);
 		me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST-2, me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
 	    }
+	    inCombat = false;
         }
     };
 
