@@ -1889,7 +1889,7 @@ public:
                     me->AI()->AttackStart(who);
                     
                 inCombat = true;
-         }
+        }
 
         void UpdateAI(uint32 const diff)
         {
@@ -1941,7 +1941,7 @@ public:
             {
                 me->GetMotionMaster()->Clear(false);
                 me->SetSpeed(MOVE_RUN, owner->GetSpeedRate(MOVE_RUN), true);
-		me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST-2, me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
+                me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST-2, me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
 	    }
 	    inCombat = false;
         }
