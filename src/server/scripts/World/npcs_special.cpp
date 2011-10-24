@@ -1852,6 +1852,7 @@ public:
         {
             CasterAI::InitializeAI();
             Unit* owner = me->GetOwner();
+            me->SetReactState(REACT_DEFENSIVE);
             if (!owner)
                 return;
             // Inherit Master's Threat List (not yet implemented)
@@ -1925,11 +1926,12 @@ public:
 
             Unit *owner = me->GetCharmerOrOwner();
 
+            me->AttackStop();
             me->CombatStop(true);
             if (owner && !me->HasUnitState(UNIT_STAT_FOLLOW))
             {
                 me->GetMotionMaster()->Clear(false);
-                me->SetSpeed(MOVE_RUN, 1.05f, true);
+                me->SetSpeed(MOVE_RUN, owner->GetSpeedRate(MOVE_RUN), true);
 		me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST-2, me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
 	    }
         }
