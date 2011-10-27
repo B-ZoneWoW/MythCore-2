@@ -1848,8 +1848,6 @@ public:
     {
         npc_mirror_imageAI(Creature *c) : CasterAI(c) {}
 
-        bool inCombat;
-
         void InitializeAI()
         {
             CasterAI::InitializeAI();
@@ -1864,9 +1862,6 @@ public:
             // Clone Me!
             owner->CastSpell(me, 45204, false);
 
-            if (owner->ToPlayer() && owner->ToPlayer()->GetSelectedUnit())
-                me->AI()->AttackStart(owner->ToPlayer()->GetSelectedUnit());
-                inCombat = true;
         }
 
         void EnterCombat(Unit *who)
@@ -1885,10 +1880,9 @@ public:
                     events.ScheduleEvent(*itr, cooldown);
                 }
             }
-                if (!inCombat && owner->isInCombat())
-                    me->AI()->AttackStart(who);
+                if (!owner->ToPlayer()->getAttackers().empty())
+                    me->AI()->AttackStart(owner->ToPlayer()->getVictim());
                     
-                inCombat = true;
         }
 
         void UpdateAI(uint32 const diff)
@@ -1924,7 +1918,6 @@ public:
                 uint32 casttime = me->GetCurrentSpellCastTime(spellId);
                 events.ScheduleEvent(spellId, (casttime ? casttime : 500) + GetAISpellInfo(spellId)->realCooldown);
             }
-                inCombat = true;
         }
 
         // Do not reload Creature templates on evade mode enter - prevent visual lost
@@ -1943,7 +1936,8 @@ public:
                 me->SetSpeed(MOVE_RUN, owner->GetSpeedRate(MOVE_RUN), true);
                 me->GetMotionMaster()->MoveFollow(owner, PET_FOLLOW_DIST-2, me->GetFollowAngle(), MOTION_SLOT_ACTIVE);
 	    }
-	    inCombat = false;
+	    if (owner->ToPlayer()->isInCombat())
+	        me->AI()->AttackStart(owner->ToPlayer()->getVictim());
         }
     };
 
