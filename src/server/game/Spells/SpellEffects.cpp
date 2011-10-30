@@ -1316,6 +1316,11 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 bp = damage + int32(rageUsed * m_spellInfo->EffectDamageMultiplier[effIndex] + m_caster->GetTotalAttackPowerValue(BASE_ATTACK) * 0.2f);
                 break;
             }
+            // Item - Warrior T10 Melee 4P Bonus
+            if (m_caster->HasAura(46916) || m_caster->HasAura(52437))
+                if (Aura * aur = m_caster->GetAura(70847))
+                    if (roll_chance_i(20))
+                        m_caster->CastSpell(m_caster, 70849, true);
             // Concussion Blow
             if (m_spellInfo->SpellFamilyFlags[0] & SPELLFAMILYFLAG_WARRIOR_CONCUSSION_BLOW)
             {
@@ -1331,11 +1336,6 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     return;
                 }
             }
-            // Item - Warrior T10 Melee 4P Bonus
-            if (m_spellInfo->Id == 46916 || m_spellInfo->Id == 52437)
-                if (Aura * aur = m_caster->GetAura(70847))
-                    if (roll_chance_i(20))
-                        m_caster->CastSpell(m_caster, 70849, true);
             break;
         case SPELLFAMILY_WARLOCK:
             // Life Tap
