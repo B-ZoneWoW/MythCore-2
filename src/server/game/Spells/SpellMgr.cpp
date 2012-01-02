@@ -4321,10 +4321,16 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->InterruptFlags = 47;
                 count++;
                 break;
+			case 71880:
+			case 71892:
+				spellInfo->SpellFamilyName = SPELLFAMILY_GENERIC;
+				spellInfo->procChance = 20;
+				count++;
+                break;
             case 16834: // Natural shapeshifter
             case 16835:
                 spellInfo->DurationIndex = 21;
-                ++count;
+                count++;
                 break;
             case 72762: // Defile
                 spellInfo->DurationIndex = 3;

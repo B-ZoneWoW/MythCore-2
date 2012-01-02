@@ -1239,6 +1239,13 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                 }
                 case 53475:                                 // Set Oracle Faction Friendly
                 case 53487:                                 // Set Wolvar Faction Honored
+				   {
+         	           if (effIndex==0)
+          		          {
+                            unitTarget->ToPlayer()->SetReputation(m_spellInfo->EffectBasePoints[0]+1,21000);
+           		      }
+                    return;
+                   }
                 case 54015:                                 // Set Oracle Faction Honored
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
