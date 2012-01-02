@@ -4321,11 +4321,11 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->InterruptFlags = 47;
                 count++;
                 break;
-			case 71880:
-			case 71892:
-				spellInfo->SpellFamilyName = SPELLFAMILY_GENERIC;
-				spellInfo->procChance = 20;
-				count++;
+	    сase 71880:
+	    case 71892:
+		spellInfo->SpellFamilyName = SPELLFAMILY_GENERIC;
+		spellInfo->procChance = 20;
+		count++;
                 break;
             case 16834: // Natural shapeshifter
             case 16835:
