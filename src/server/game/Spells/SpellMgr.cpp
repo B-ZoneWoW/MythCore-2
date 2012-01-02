@@ -4321,7 +4321,7 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->InterruptFlags = 47;
                 count++;
                 break;
-	    сase 71880:
+	    case 71880:
 	    case 71892:
 		spellInfo->SpellFamilyName = SPELLFAMILY_GENERIC;
 		spellInfo->procChance = 20;
