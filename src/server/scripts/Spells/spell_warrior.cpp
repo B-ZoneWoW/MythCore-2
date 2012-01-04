@@ -140,4 +140,5 @@ void AddSC_warrior_spell_scripts()
 {
     new spell_warr_last_stand();
     new spell_warr_improved_spell_reflection();
+    new spell_warr_vigilance();
 }
