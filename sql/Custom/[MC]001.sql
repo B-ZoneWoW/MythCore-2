@@ -1,5 +1,5 @@
-update `creature_template` set
-`mechanic_immune_mask`=`mechanic_immune_mask`|549699191 where `entry` in
+UPDATE `creature_template` SET
+`mechanic_immune_mask`=`mechanic_immune_mask`|549699191 WHERE `entry` IN
 (28781,32796);
 
-update `creature_addon` set `mount` = '26645' where `guid` = '86264';
+UPDATE `creature_addon` SET `mount` = '26645' WHERE `guid` = '86264';
