@@ -708,7 +708,7 @@ enum SplineFlags
     SPLINEFLAG_CATMULL_ROM    = 0x00040000,
     SPLINEFLAG_UNKNOWN20      = 0x00080000,
     SPLINEFLAG_UNKNOWN21      = 0x00100000,
-    SPLINEFLAG_UNKNOWN22      = 0x00200000,
+    SPLINEFLAG_ANIMATIONTIER  = 0x00200000,
     SPLINEFLAG_UNKNOWN23      = 0x00400000,
     SPLINEFLAG_TRANSPORT      = 0x00800000,
     SPLINEFLAG_EXIT_VEHICLE   = 0x01000000,
@@ -943,6 +943,24 @@ struct SpellPeriodicAuraLogInfo
 };
 
 uint32 createProcExtendMask(SpellNonMeleeDamage *damageInfo, SpellMissInfo missCondition);
+
+enum UnitAnimationState
+{
+    ANIMATION_ON_GROUND = 0,
+    ANIMATION_SWIMMING  = 1,
+    ANIMATION_HOVER     = 2,
+    ANIMATION_FLYING    = 3,
+};
+
+struct MonsterMoveData
+{
+    MonsterMoveData() : SplineFlag(0), AnimationState(ANIMATION_ON_GROUND), Time(0), SpeedZ(0.0f) {}
+    Position DestLocation;
+    uint32 SplineFlag;
+    UnitAnimationState AnimationState;  // Only used with SPLINEFLAG_ANIMATIONTIER
+    uint32 Time;
+    float SpeedZ;                       // Only used with SPLINEFLAG_TRAJECTORY
+};
 
 #define MAX_DECLINED_NAME_CASES 5
 
@@ -1548,6 +1566,7 @@ class Unit : public WorldObject
         void SendMonsterStop(bool on_death = false);
         void SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint32 Time, Player* player = NULL);
         void SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint32 MoveFlags, uint32 time, float speedZ, Player* player = NULL);
+        void SendMonsterMove(MonsterMoveData const& moveData, Player* receiver = NULL);
         void SendMonsterMoveExitVehicle(Position const* newPos);
         //void SendMonsterMove(float NewPosX, float NewPosY, float NewPosZ, uint8 type, uint32 MovementFlags, uint32 Time, Player* player = NULL);
         void SendMonsterMoveTransport(Unit *vehicleOwner);
