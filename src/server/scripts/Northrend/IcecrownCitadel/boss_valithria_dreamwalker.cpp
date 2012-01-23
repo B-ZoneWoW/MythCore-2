@@ -273,6 +273,8 @@ class boss_valithria : public CreatureScript
                 // immune to percent heals
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_OBS_MOD_HEALTH, true);
                 me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_HEAL_PCT, true);
+                // Glyph of Dispel Magic - not a percent heal by effect, its cast with custom basepoints
+                me->ApplySpellImmune(0, IMMUNITY_ID, 56131, true);
             }
 
             uint32 GetData(uint32 id)
