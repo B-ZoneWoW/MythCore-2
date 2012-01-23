@@ -137,7 +137,8 @@ enum MovementPoints
     POINT_FROSTWYRM_FLY_IN = 1,
     POINT_FROSTWYRM_LAND = 2,
     POINT_AIR_PHASE = 3,
-    POINT_LAND = 4,
+    POINT_TAKEOFF = 4,
+    POINT_LAND = 5,
 };
 
 enum Shadowmourne
@@ -149,9 +150,9 @@ enum Shadowmourne
     SPELL_FROST_IMBUED_BLADE = 72290,
 };
 
-Position const RimefangFlyPos = {4413.309f, 2456.421f, 223.3795f, 2.890186f};
+Position const RimefangFlyPos = {4413.309f, 2456.421f, 233.3795f, 2.890186f};
 Position const RimefangLandPos = {4413.309f, 2456.421f, 203.3848f, 2.890186f};
-Position const SpinestalkerFlyPos = {4418.895f, 2514.233f, 220.4864f, 3.396045f};
+Position const SpinestalkerFlyPos = {4418.895f, 2514.233f, 230.4864f, 3.396045f};
 Position const SpinestalkerLandPos = {4418.895f, 2514.233f, 203.3848f, 3.396045f};
 Position const SindragosaSpawnPos = {4818.700f, 2483.710f, 287.0650f, 3.089233f};
 Position const SindragosaFlyPos = {4475.190f, 2484.570f, 234.8510f, 3.141593f};
@@ -165,7 +166,7 @@ class FrostwyrmLandEvent : public BasicEvent
 
         bool Execute(uint64 /*eventTime*/, uint32 /*updateTime*/)
         {
-            owner.GetMotionMaster()->MovePoint(POINT_FROSTWYRM_LAND, dest);
+            owner.GetMotionMaster()->MoveLand(POINT_FROSTWYRM_LAND, dest, 8.247422f);
             return true;
         }
 
@@ -293,6 +294,9 @@ class boss_sindragosa : public CreatureScript
                         // Sindragosa enters combat as soon as she lands
                         DoZoneInCombat();
                         break;
+                    case POINT_TAKEOFF:
+						events.ScheduleEvent(EVENT_AIR_MOVEMENT, 1);
+						break;
                     case POINT_AIR_PHASE:
                         me->CastCustomSpell(SPELL_ICE_TOMB_TARGET, SPELLVALUE_MAX_TARGETS, RAID_MODE<int32>(2, 5, 2, 6), false);
                         events.ScheduleEvent(EVENT_FROST_BOMB, 8000);
