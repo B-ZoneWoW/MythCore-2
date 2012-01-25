@@ -455,6 +455,9 @@ class boss_prince_keleseth_icc : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
+                events.Reset();
+                summons.DespawnAll();
+
                 Talk(SAY_KELESETH_DEATH);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
             }
@@ -702,6 +705,9 @@ class boss_prince_taldaram_icc : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
+                events.Reset();
+                summons.DespawnAll();
+
                 Talk(EMOTE_TALDARAM_DEATH);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
             }
@@ -939,6 +945,9 @@ class boss_prince_valanar_icc : public CreatureScript
 
             void JustDied(Unit* /*killer*/)
             {
+                events.Reset();
+                summons.DespawnAll();
+
                 Talk(SAY_VALANAR_DEATH);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
             }
