@@ -574,9 +574,9 @@ class npc_rotting_frost_giant : public CreatureScript
     public:
         npc_rotting_frost_giant() : CreatureScript("npc_rotting_frost_giant") { }
 
-        struct npc_rotting_frost_giantAI : public BossAI
+        struct npc_rotting_frost_giantAI : public ScriptedAI
         {
-            npc_rotting_frost_giantAI(Creature* creature) : BossAI(creature, DATA_GUNSHIP_EVENT)
+            npc_rotting_frost_giantAI(Creature* creature) : ScriptedAI(creature)
             {
             }
 
@@ -591,21 +591,6 @@ class npc_rotting_frost_giant : public CreatureScript
             void JustDied(Unit* /*killer*/)
             {
                 _events.Reset();
-                if (instance)
-                    instance->SetBossState(DATA_GUNSHIP_EVENT, DONE);
-            }
-
-            void JustReachedHome()
-            {
-                if (instance)
-                    instance->SetBossState(DATA_GUNSHIP_EVENT, FAIL);
-            }
-
-            void EnterCombat(Unit* /*who*/)
-            {
-                DoZoneInCombat();
-                if (instance)
-                    instance->SetBossState(DATA_GUNSHIP_EVENT, IN_PROGRESS);
             }
 
             void UpdateAI(uint32 const diff)

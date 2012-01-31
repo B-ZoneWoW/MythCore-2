@@ -29,6 +29,7 @@
 #include "CellImpl.h"
 #include "ScriptMgr.h"
 #include "OutdoorPvPWG.h"
+#include "Vehicle.h"
 
 class Aura;
 //

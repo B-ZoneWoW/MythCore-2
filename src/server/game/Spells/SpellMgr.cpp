@@ -4097,6 +4097,13 @@ void SpellMgr::LoadSpellCustomAttr()
             case 28542: // Life Drain - Sapphiron
             case 66588: // Flaming Spear
             case 54171: // Divine Storm
+                spellInfo->MaxAffectedTargets = 3;
+                break;
+            case 68645: // Rocket Pack! Hack untill movejump will be implemented properly
+                spellInfo->Effect[0] = SPELL_EFFECT_KNOCK_BACK_DEST;
+                spellInfo->EffectMiscValue[0] = -250;
+                spellInfo->EffectBasePoints[0] = 150;
+                break;
             case 71899: // Bloodbolt Whirl (10 man)
             case 71901: // Bloodbolt Whirl (10 man heroic)
                 spellInfo->MaxAffectedTargets = 3;
