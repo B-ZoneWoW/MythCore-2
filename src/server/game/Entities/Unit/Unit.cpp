@@ -625,6 +625,15 @@ void Unit::DealDamageMods(Unit *pVictim, uint32 &damage, uint32* absorb)
         return;
     }
 
+    //You don't lose health from damage taken from another player while in a sanctuary
+    //You still see it in the combat log though
+    if (!IsAllowedDamageInArea(pVictim))
+    {
+        if (absorb)
+            *absorb += damage;
+        damage = 0;
+    }
+
     uint32 originalDamage = damage;
 
     if (absorb && originalDamage > damage)
@@ -1164,6 +1173,11 @@ void Unit::DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabilityLoss)
     if (!pVictim->isAlive() || pVictim->HasUnitState(UNIT_STAT_IN_FLIGHT) || (pVictim->HasUnitState(UNIT_STAT_ONVEHICLE) && pVictim->GetVehicleBase() != this) || (pVictim->GetTypeId() == TYPEID_UNIT && pVictim->ToCreature()->IsInEvadeMode()))
         return;
 
+    //You don't lose health from damage taken from another player while in a sanctuary
+    //You still see it in the combat log though
+    if (!IsAllowedDamageInArea(pVictim))
+        return;
+
     SpellEntry const* spellProto = sSpellStore.LookupEntry(damageInfo->SpellID);
     if (spellProto == NULL)
     {
@@ -1388,6 +1402,11 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
     Unit *pVictim = damageInfo->target;
 
     if (!pVictim->isAlive() || pVictim->HasUnitState(UNIT_STAT_IN_FLIGHT) || (pVictim->HasUnitState(UNIT_STAT_ONVEHICLE) && pVictim->GetVehicleBase() != this) || (pVictim->GetTypeId() == TYPEID_UNIT && pVictim->ToCreature()->IsInEvadeMode()))
+        return;
+
+    //You don't lose health from damage taken from another player while in a sanctuary
+    //You still see it in the combat log though
+    if (!IsAllowedDamageInArea(pVictim))
         return;
 
     // Hmmmm dont like this emotes client must by self do all animations
@@ -3284,6 +3303,38 @@ void Unit::_AddAura(UnitAura* aura, Unit* caster)
                 ++itr;
         }
     }
+}
+
+bool Unit::IsAllowedDamageInArea(Unit* pVictim) const
+{
+    // can damage self anywhere
+    if (pVictim == this)
+        return true;
+
+    // can damage own pet anywhere
+    if (pVictim->GetGUID() == GetGUID())
+        return true;
+
+    // non player controlled unit can damage anywhere
+    Player const* pOwner = GetCharmerOrOwnerPlayerOrPlayerItself();
+    if (!pOwner)
+        return true;
+
+    // can damage non player controlled victim anywhere
+    Player const* vOwner = pVictim->GetCharmerOrOwnerPlayerOrPlayerItself();
+    if (!vOwner)
+        return true;
+
+    // can damage opponent in duel
+    if (pOwner->duel && pOwner->duel->opponent == vOwner)
+        return true;
+
+    // can't damage player controlled unit by player controlled unit in sanctuary
+    AreaTableEntry const* area = GetAreaEntryByAreaID(pVictim->GetAreaId());
+    if (area && area->flags & AREA_FLAG_SANCTUARY)
+        return false;
+
+    return true;
 }
 
 // creates aura application instance and registers it in lists
