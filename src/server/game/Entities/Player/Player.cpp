@@ -14843,6 +14843,21 @@ bool Player::CanCompleteQuest(uint32 quest_id)
         if (!qInfo->IsRepeatable() && rewItr != m_RewardedQuests.end())
             return false;                                   // not allow re-complete quest
 
+        // Anti WPE for client command /script CompleteQuest() on quests with AutoComplete flag
+        QuestStatus status = GetQuestStatus(quest_id);
+
+        if (status == QUEST_STATUS_NONE)
+        {
+            for (uint32 i = 0; i < QUEST_ITEM_OBJECTIVES_COUNT; ++i)
+            {
+                  if (qInfo->ReqItemCount[i] != 0 &&
+                  GetItemCount(qInfo->ReqItemId[i]) < qInfo->ReqItemCount[i])
+                  {
+                      return false;
+                  }
+            }
+        }
+
         // auto complete quest
         if ((qInfo->IsAutoComplete() || qInfo->GetFlags() & QUEST_FLAGS_AUTOCOMPLETE) && CanTakeQuest(qInfo, false))
             return true;
