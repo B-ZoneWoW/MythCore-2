@@ -26,6 +26,7 @@
 #include "Log.h"
 #include "Master.h"
 #include "RARunnable.h"
+#include "TCSoap.h"
 #include "Timer.h"
 #include "Util.h"
 #include "AuthSocket.h"
@@ -222,6 +223,16 @@ int Master::Run()
     }
     #endif
 
+    //Start soap serving thread
+    ACE_Based::Thread* soap_thread = NULL;
+
+    if (sConfig->GetBoolDefault("SOAP.Enabled", false))
+    {
+        TCSoapRunnable *runnable = new TCSoapRunnable();
+        runnable->setListenArguments(sConfig->GetStringDefault("SOAP.IP", "127.0.0.1"), sConfig->GetIntDefault("SOAP.Port", 7878));
+        soap_thread = new ACE_Based::Thread(runnable);
+    }
+
     ///- Start up freeze catcher thread
     if (uint32 freeze_delay = sConfig->GetIntDefault("MaxCoreStuckTime", 0))
     {
@@ -246,6 +257,13 @@ int Master::Run()
     LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color & ~%u, population = 0 WHERE id = '%u'", REALM_FLAG_INVALID, realmID);
 
     sWorldSocketMgr->Wait();
+
+    if (soap_thread)
+    {
+        soap_thread->wait();
+        soap_thread->destroy();
+        delete soap_thread;
+    }
 
     // set server offline
     LoginDatabase.DirectPExecute("UPDATE realmlist SET color = color | %u WHERE id = '%d'", REALM_FLAG_OFFLINE, realmID);

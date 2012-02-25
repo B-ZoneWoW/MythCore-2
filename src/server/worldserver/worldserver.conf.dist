@@ -2565,7 +2565,7 @@ Ra.Port = 3443
 Ra.MinLevel = 3
 
 #
-#    SOAP.Enable
+#    SOAP.Enabled
 #        Description: Enable soap service
 #        Default:     0 - (Disabled)
 #                     1 - (Enabled)
