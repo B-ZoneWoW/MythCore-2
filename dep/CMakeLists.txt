@@ -26,6 +26,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 endif()
 
 add_subdirectory(g3dlite)
+add_subdirectory(gsoap)
 
 if(TOOLS)
   add_subdirectory(libmpq)
