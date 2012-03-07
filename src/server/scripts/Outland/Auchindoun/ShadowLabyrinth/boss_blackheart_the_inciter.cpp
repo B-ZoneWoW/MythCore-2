@@ -138,7 +138,7 @@ public:
                 {
                     Unit *pTarget = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                     if (pTarget && pTarget->GetTypeId() == TYPEID_PLAYER)
-                        pTarget->CastSpell(pTarget, SPELL_INCITE_CHAOS_B, true);
+                        me->CastSpell(pTarget, SPELL_INCITE_CHAOS_B, true);
                 }
 
                 DoResetThreat();
